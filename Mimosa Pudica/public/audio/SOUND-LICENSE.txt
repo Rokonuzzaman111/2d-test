@@ -1,0 +1,1 @@
+Sound effects and forest ambient score are original procedural synthesis created for this project. No external samples or recordings. Generator: scripts/generate-sound.mjs.

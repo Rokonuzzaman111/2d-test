@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Live Moving Remotion Scene Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0B1519;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: sans-serif;
+        }
+
+        .video-canvas {
+            width: 450px;
+            height: 850px;
+            background-color: #FAF6F0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .frame-meta {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #668084;
+            text-transform: uppercase;
+        }
+
+        .frame-title {
+            position: absolute;
+            top: 75px;
+            left: 40px;
+            font-size: 32px;
+            font-weight: 900;
+            color: #142D41;
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .frame-title span {
+            color: #308ED5;
+        }
+
+        .frame-sub {
+            position: absolute;
+            top: 165px;
+            left: 40px;
+            font-size: 15px;
+            color: #557477;
+            margin: 0;
+        }
+
+        svg {
+            position: absolute;
+            top: 220px;
+            left: 0;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="video-canvas">
+        <div class="frame-meta">আরও একটি চমক</div>
+        <h1 class="frame-title">অক্টোপাসের<br>রক্ত <span id="titleColor">নীল!</span></h1>
+        <p class="frame-sub">অক্সিজেন বহনের প্রোটিনটাই আলাদা</p>
+
+        <svg viewBox="0 0 1080 1020">
+            <!-- রক্তকণিকার কন্টেইনার -->
+            <circle cx="370" cy="285" r="210" fill="#E4EEF5" />
+
+            <!-- ডাইনামিক ব্লাড ড্রপলেট -->
+            <g transform="translate(370,245) scale(1.35) translate(-25,-35)">
+                <path id="bloodDroplet"
+                    d="M25 0 C25 0, 0 25, 0 45 C0 58, 11 68, 25 68 C39 68, 50 58, 50 45 C50 25, 25 0, 25 0 Z"
+                    fill="#F56F61" />
+            </g>
+            <text id="bloodLabel" x="370" y="545" text-anchor="middle" font-size="38" font-weight="700"
+                fill="#142D41">মানুষের রক্ত</text>
+
+            <!-- অবতার ফিক্সড গাইড -->
+            <g transform="translate(670, 190) scale(0.48)">
+                <circle cx="150" cy="150" r="110" fill="#2BB0AD" />
+                <circle cx="110" cy="130" r="18" fill="white" />
+                <circle cx="190" cy="130" r="18" fill="white" />
+                <circle cx="105" cy="130" r="8" fill="#1C2E3D" />
+                <circle cx="185" cy="130" r="8" fill="#1C2E3D" />
+                <path d="M135 170 Q150 185 165 170" fill="none" stroke="#1C2E3D" stroke-width="4"
+                    stroke-linecap="round" />
+            </g>
+
+            <!-- অ্যানিমেটেড ইনফো বক্স কন্টেইনার -->
+            <g id="infoCard" opacity="0">
+                <rect x="105" y="600" width="870" height="370" rx="45" fill="white" stroke="#DCE5EC" stroke-width="3" />
+                <text x="540" y="665" text-anchor="middle" font-size="40" font-weight="800"
+                    fill="#308ED5">হিমোসায়ানিন</text>
+
+                <!-- প্রোটিন চেইন এবং তামা পরমাণু -->
+                <path d="M235 810 Q270 710 350 760 Q420 700 460 785 Q525 810 460 880 Q395 935 340 875 Q235 920 235 810Z"
+                    fill="#E4EEF5" stroke="#7DB9DD" stroke-width="5" />
+                <circle cx="330" cy="817" r="24" fill="#C98C54" />
+                <circle cx="399" cy="817" r="24" fill="#C98C54" />
+                <text x="365" y="930" text-anchor="middle" font-size="28" fill="#9D693E">তামা</text>
+
+                <!-- স্লাইডিং অক্সিজেন অ্যাটম গ্রুপ -->
+                <g id="oxygenGroup">
+                    <circle cx="-17" r="23" fill="#7871BD" />
+                    <circle cx="17" r="23" fill="#AAA2DF" />
+                </g>
+
+                <text x="735" y="790" text-anchor="middle" font-size="34" font-weight="650"
+                    fill="#6760AA">অক্সিজেন</text>
+                <text x="735" y="847" text-anchor="middle" font-size="29" fill="#557477">তামাযুক্ত প্রোটিন</text>
+                <text x="735" y="898" text-anchor="middle" font-size="27" fill="#308ED5">অক্সিজেন যুক্ত হলে নীল</text>
+                <text x="540" y="1008" text-anchor="middle" font-size="24" fill="#668084">প্রোটিনের সরল
+                    ধারণাচিত্র</text>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        let frame = 0;
+
+        // Remotion cues mapping
+        const blueCue = 20;   // cue(4,1,2) mock frames
+        const proteinCue = 55; // cue(4,3,6) mock frames
+
+        function lerpColor(color1, color2, factor) {
+            const c1 = parseInt(color1.slice(1), 16), c2 = parseInt(color2.slice(1), 16);
+            const r1 = c1 >> 16, g1 = (c1 >> 8) & 0xff, b1 = c1 & 0xff;
+            const r2 = c2 >> 16, g2 = (c2 >> 8) & 0xff, b2 = c2 & 0xff;
+            const r = Math.round(r1 + factor * (r2 - r1)), g = Math.round(g1 + factor * (g2 - g1)), b = Math.round(b1 + factor * (b2 - b1));
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function animate() {
+            frame = (frame + 0.75) % 150; // Continuous render loop tracker
+
+            // 1. Color Shift Animation
+            let shiftProgress = Math.min(1, Math.max(0, (frame - blueCue) / 20));
+            let currentDropColor = lerpColor("#F56F61", "#308ED5", shiftProgress);
+            document.getElementById("bloodDroplet").setAttribute("fill", currentDropColor);
+            document.getElementById("bloodLabel").textContent = shiftProgress < 0.5 ? "মানুষের রক্ত" : "অক্টোপাসের রক্ত";
+
+            // 2. Info Card Reveal Animation
+            let showProgress = Math.min(1, Math.max(0, (frame - proteinCue) / 20));
+            let cardG = document.getElementById("infoCard");
+            cardG.style.opacity = showProgress;
+            cardG.setAttribute("transform", `translate(0, ${30 * (1 - showProgress)})`);
+
+            // 3. Oxygen Binding Path Interpolation
+            let bindProgress = Math.min(1, Math.max(0, (frame - (proteinCue + 15)) / 40));
+            let oxX = 660 - 295 * bindProgress;
+            let oxY = 780 - 11 * bindProgress;
+            document.getElementById("oxygenGroup").setAttribute("transform", `translate(${oxX}, ${oxY})`);
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+
+</html>

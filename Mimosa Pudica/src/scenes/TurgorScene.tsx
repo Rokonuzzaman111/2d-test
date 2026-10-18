@@ -6,6 +6,7 @@ import {
   pointOnPath,
 } from "../components/Botanical";
 import { colors } from "../styles/theme";
+import { CameraRig, ExposurePulse } from "./Cinematics";
 
 const WATER_PATH = "M392,255 C470,205 610,205 700,255";
 
@@ -60,6 +61,8 @@ export const TurgorScene = () => {
   const ionFlow = interpolate(f, [30, 60], [0, 1], clampBoth);
 
   return (
+    <>
+    <CameraRig move="craneUp" dur={680}>
     <Frame
       scene={4}
       tag="মূল রহস্য"
@@ -178,5 +181,8 @@ export const TurgorScene = () => {
         </g>
       </svg>
     </Frame>
+    </CameraRig>
+    <ExposurePulse atFrame={70} strength={0.18} color="#7FD3F0" />
+    </>
   );
 };

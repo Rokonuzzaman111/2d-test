@@ -14,6 +14,7 @@ import {
   clamp01,
 } from "../components/Botanical";
 import { colors } from "../styles/theme";
+import { CameraRig, ExposurePulse } from "./Cinematics";
 
 const PX = 540;
 const PY = 905;
@@ -82,6 +83,8 @@ export const SignalScene = () => {
   const sigLabel = interpolate(f, [120, 145], [0, 1], clampBoth);
 
   return (
+    <>
+    <CameraRig move="orbitRight" dur={470}>
     <Frame
       scene={2}
       tag="প্রশ্ন"
@@ -173,5 +176,8 @@ export const SignalScene = () => {
         </g>
       </svg>
     </Frame>
+    </CameraRig>
+    <ExposurePulse atFrame={34} strength={0.34} color="#BFFFF0" />
+    </>
   );
 };

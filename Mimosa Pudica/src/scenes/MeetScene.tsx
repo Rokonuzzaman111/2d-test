@@ -12,6 +12,7 @@ import {
   mimosaAttach,
 } from "../components/Botanical";
 import { colors } from "../styles/theme";
+import { CameraRig, ForegroundLeafPass } from "./Cinematics";
 
 const PX = 540;
 const PY = 905;
@@ -50,6 +51,8 @@ export const MeetScene = () => {
   const LC = { x: 850, y: 775 };
 
   return (
+    <>
+    <CameraRig move="pullOut" dur={560}>
     <Frame
       scene={1}
       tag="পরিচয়"
@@ -228,5 +231,8 @@ export const MeetScene = () => {
         </g>
       </svg>
     </Frame>
+    </CameraRig>
+    <ForegroundLeafPass startFrame={210} dur={80} tint="#1E5236" />
+    </>
   );
 };

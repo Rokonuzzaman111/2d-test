@@ -1,5 +1,4 @@
-import { Audio } from "@remotion/media";
-import { AbsoluteFill, Sequence, useVideoConfig, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
 import { MysteryScene } from "../scenes/MysteryScene";
 import { MeetScene } from "../scenes/MeetScene";
 import { SignalScene } from "../scenes/SignalScene";

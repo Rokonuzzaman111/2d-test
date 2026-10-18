@@ -2,6 +2,13 @@ import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
 import { font, colors } from "../styles/theme";
 import { FloatingParticles } from "../components/FloatingParticles";
 import { SceneTransition } from "../components/SceneTransition";
+import {
+  FilmGrain,
+  CinematicVignette,
+  ChromaticEdge,
+  ForegroundBokeh,
+  GodRays,
+} from "../components/Realism";
 import type { ReactNode } from "react";
 
 const durations = [510, 630, 540, 450, 750, 450, 690];
@@ -39,6 +46,20 @@ export const Frame = ({
       <AbsoluteFill
         style={{
           background: `radial-gradient(620px 520px at ${30 + drift * 6}% 72%, ${colors.emerald}26, transparent 70%), radial-gradient(520px 440px at ${85 - drift * 4}% 18%, ${colors.sunlight}14, transparent 70%)`,
+        }}
+      />
+
+      {/* Volumetric sunlight shafts through the canopy */}
+      <GodRays xPct={82} yPct={6} opacity={0.1} />
+      {/* Mottled foliage shadow pattern drifting over the set */}
+      <AbsoluteFill
+        style={{
+          pointerEvents: "none",
+          background: `radial-gradient(closest-side at 20% 15%, rgba(0,0,0,0.35), transparent),
+            radial-gradient(closest-side at 75% 8%, rgba(0,0,0,0.3), transparent),
+            radial-gradient(closest-side at 90% 40%, rgba(0,0,0,0.22), transparent)`,
+          transform: `translate(${drift * 14}px, ${-drift * 8}px)`,
+          transition: "none",
         }}
       />
 
@@ -137,14 +158,11 @@ export const Frame = ({
         {children}
       </SceneTransition>
 
-      {/* Soft vignette */}
-      <AbsoluteFill
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, transparent 58%, rgba(0,0,0,0.42) 100%)",
-          pointerEvents: "none",
-        }}
-      />
+      {/* Graded cinematic finish stack: vignette + lens fringe + bokeh + grain */}
+      <CinematicVignette strength={0.5} />
+      <ChromaticEdge />
+      <ForegroundBokeh count={6} />
+      <FilmGrain intensity={0.05} />
 
       {/* Progress bar */}
       <div

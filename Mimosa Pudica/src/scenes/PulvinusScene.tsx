@@ -8,6 +8,7 @@ import {
   rnd,
 } from "../components/Botanical";
 import { colors } from "../styles/theme";
+import { CameraRig } from "./Cinematics";
 
 const PIV = { x: 300, y: 430 };
 const PLEN = 270;
@@ -40,6 +41,8 @@ export const PulvinusScene = () => {
   const lowerLevel = lerp(0.9, 0.3, fold);
 
   return (
+    <>
+    <CameraRig move="macroPush" dur={400}>
     <Frame
       scene={3}
       tag="বৈজ্ঞানিক ব্যাখ্যা"
@@ -201,5 +204,7 @@ export const PulvinusScene = () => {
         </g>
       </svg>
     </Frame>
+    </CameraRig>
+    </>
   );
 };

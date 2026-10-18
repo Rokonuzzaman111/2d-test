@@ -2,6 +2,7 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring } from "remotion";
 import { Frame } from "./Frame";
 import { RealMimosa, Ground, Fireflies } from "../components/Botanical";
 import { colors } from "../styles/theme";
+import { CameraRig } from "./Cinematics";
 
 /** Scene 6 — MYTH VS SCIENCE */
 export const MythScene = () => {
@@ -23,6 +24,8 @@ export const MythScene = () => {
   const checkReveal = interpolate(f, [200, 230], [0, 1], clampBoth);
 
   return (
+    <>
+    <CameraRig move="driftLeft" dur={400}>
     <Frame
       scene={5}
       tag="সত্য নাকি ভুল?"
@@ -125,5 +128,7 @@ export const MythScene = () => {
         </g>
       </svg>
     </Frame>
+    </CameraRig>
+    </>
   );
 };

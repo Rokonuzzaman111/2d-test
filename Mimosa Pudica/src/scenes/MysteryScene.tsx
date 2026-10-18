@@ -10,6 +10,7 @@ import {
   clamp01,
 } from "../components/Botanical";
 import { colors } from "../styles/theme";
+import { CameraRig, LetterboxBars, ExposurePulse, ForegroundLeafPass } from "./Cinematics";
 
 const PX = 540;
 const PY = 915;
@@ -49,6 +50,8 @@ export const MysteryScene = () => {
   const textReveal = interpolate(f, [170, 195], [0, 1], clampBoth);
 
   return (
+    <>
+    <CameraRig move="pushIn" dur={480}>
     <Frame
       scene={0}
       tag="রহস্যের শুরু"
@@ -130,5 +133,10 @@ export const MysteryScene = () => {
         )}
       </svg>
     </Frame>
+    </CameraRig>
+        <LetterboxBars />
+    <ForegroundLeafPass startFrame={70} dur={90} />
+    <ExposurePulse atFrame={150} strength={0.3} />
+    </>
   );
 };

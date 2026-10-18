@@ -2,6 +2,7 @@ import { useCurrentFrame, useVideoConfig, interpolate, spring, Easing } from "re
 import { Frame } from "./Frame";
 import { RealMimosa, Ground, Fireflies } from "../components/Botanical";
 import { colors } from "../styles/theme";
+import { CameraRig, ForegroundLeafPass } from "./Cinematics";
 
 /** Scene 7 — REVEAL AND CLOSING with CTA */
 export const OutroScene = () => {
@@ -33,6 +34,8 @@ export const OutroScene = () => {
   const ctaPulse = 1 + 0.018 * Math.sin(f / 9) * ctaReveal;
 
   return (
+    <>
+    <CameraRig move="pullOut" dur={620}>
     <Frame
       scene={6}
       tag="প্রকৃতির বিস্ময়"
@@ -118,5 +121,8 @@ export const OutroScene = () => {
           })}
       </svg>
     </Frame>
+    </CameraRig>
+    <ForegroundLeafPass startFrame={40} dur={90} tint="#143724" />
+    </>
   );
 };

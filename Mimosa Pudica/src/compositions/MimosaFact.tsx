@@ -28,7 +28,12 @@ export const MimosaFact = ({ music = true }: VideoProps) => {
   ];
 
   return (
-    <AbsoluteFill style={{ fontFamily: font }}>
+    <AbsoluteFill
+      style={{
+        fontFamily: font,
+        scale: 0.996
+      }}
+    >
       {scenes.map(({ name, start, dur, Scene, idx }) => (
         <Sequence
           key={name}
